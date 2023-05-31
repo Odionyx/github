@@ -1,5 +1,2 @@
-.vs/
-x64/
-*.vcxproj.filters
-*.vcxproj.user
-out.txt
+Task2_Accounts/
+Task3_Structure_output/

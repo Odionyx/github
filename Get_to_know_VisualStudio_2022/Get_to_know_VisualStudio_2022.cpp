@@ -4,11 +4,11 @@
 #include <string>
 
 
-bool reading_from_a_file (std::ifstream& fin, int*& arr, int& size) 
+bool reading_size_from_a_file(std::ifstream& fin, int& size)
 {
     // считывание размера 
     if (!(fin >> size)) {
-        std::cout << "Error reading from file." << std::endl;
+        std::cout << "Error reading size from file." << std::endl;
         return false;
     }
     // проверка размера
@@ -16,6 +16,11 @@ bool reading_from_a_file (std::ifstream& fin, int*& arr, int& size)
         std::cout << "Negative or zero size." << std::endl;
         return false;
     }
+    return true;
+}
+
+bool reading_from_a_file (std::ifstream& fin, int*& arr, int size)
+{
     // заполнение массива
     for (int x = 0; (x < size); x++) {
         int y = 0;
@@ -24,11 +29,20 @@ bool reading_from_a_file (std::ifstream& fin, int*& arr, int& size)
     }
     return true;
 }
+bool delete_array (int*& arr, int*& arr2)
+{
+    // удаление массивов
+    delete[] arr2;
+    delete[] arr;
+    arr2 = nullptr;
+    arr = nullptr;
+    return true;
+}
 
 bool writing_to_a_file (std::ofstream& fout, int* arr, int size, bool b) 
 {
-    if (b && (fout << size)) {
-        fout << std::endl;
+    if (b) {
+        fout << size << std::endl;
         fout << arr[size - 1];
         for (int x = 0; x < (size - 1); x++) {
             fout << " " << arr[x];
@@ -36,8 +50,8 @@ bool writing_to_a_file (std::ofstream& fout, int* arr, int size, bool b)
         fout << std::endl;
         return true;
     }
-    else if (!b && (fout << size)) {
-        fout << std::endl;
+    else if (!b) {
+        fout << size << std::endl;
         for (int x = 1; x < size; x++) {
             fout << arr[x] << " ";
         }
@@ -56,25 +70,31 @@ int main(int argc, char** argv) {
     int size = 0;
     int size2 = 0;
     bool b = true;
-    // создание массивов
-    int* arr = new int[size];
-    int* arr2 = new int[size2];
-
+    int* arr = nullptr;
+    int* arr2 = nullptr;
     // чтение из файла
-    std::string str = {'i','n','.','t','x','t'};
+    std::string str = "in.txt";
     std::ifstream fin (str);
     
     if (fin.is_open()) {
+        //arr
+        reading_size_from_a_file(fin, size);
+        arr = new int[size];
         reading_from_a_file (fin, arr, size);
+        //arr2
+        reading_size_from_a_file(fin, size2);
+        arr2 = new int[size2];
         reading_from_a_file (fin, arr2, size2);
+
         fin.close();
     }
     else {
-        std::cout << "The in.txt file does not exist." << std::endl;
+        std::cout << "Error reading from file." << std::endl;
+        delete_array(arr, arr2);
         return 1;
     }
     // запись в файл
-    str = {'o','u','t','.','t','x','t'};
+    str = "out.txt";
     std::ofstream fout(str);
 
     if (fout.is_open()) {
@@ -83,14 +103,10 @@ int main(int argc, char** argv) {
     }
     else {
         std::cout << "Failed to write to file out.txt." << std::endl;
+        delete_array(arr, arr2);
         return 1;
     }
     fout.close();
-
-    // удаление массивов
-    arr2 = nullptr;
-    arr = nullptr;
-    delete[] arr2;
-    delete[] arr;
+    delete_array(arr, arr2);
     return 0;
 }
