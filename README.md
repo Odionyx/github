@@ -1,1 +1,1 @@
-### Thanks for the tutorial!
+### Thank you for the guidance!
