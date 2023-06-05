@@ -1,8 +1,6 @@
 ﻿// Task1_Addresses.cpp :
-#include <string>
-#include <fstream>
 #include <iostream>
-
+#include <fstream>
 /*
 Вам дан файл in.txt, в котором находится N адресов. Число N идёт первым в файле. 
 После числа N располагаются N блоков по 4 строки в каждом.
@@ -17,46 +15,27 @@
 class Address
 {
 private:
-    std::string* city;
-    std::string* street;
+    std::string city;
+    std::string street;
     int house;
     int apartment;
 public:
-    //* Default Constructor
-    Address(void) {
-        std::string c = "Unknown";
-        this -> city = &c;
-        this -> street = &c;
-        this -> house = 1;
-        this -> apartment = 1;
+    //* Default constructor
+    Address() {};
+    //* Constructor with parameters
+    Address(std::string* city, std::string* street, int* house, int* apartment) {
+        this -> city = *city;
+        this -> street = *street;
+        this -> house = *house;
+        this -> apartment = *apartment;
     }
-    void set_city(std::string* city) {
-        this->city = city;
-    }
-    void set_street(std::string* street) {
-        this->street = street;
-    }
-    void set_house(int* house) {
-        this->house = *house;
-    }
-    void set_apartment(int* apartment) {
-        this->apartment = *apartment;
-    }
-    std::string get_city(void) {
-        return *city;
-    }
-    std::string get_street(void) {
-        return *street;
-    }
-    int get_house(void) {
-        return house;
-    }
-    int get_apartment(void) {
-        return apartment;
+    void get_address(std::ofstream& fout) {
+        fout << this->city << " " << this->street << " " << this->house << " " << this->apartment;
+        return;
     }
 };
 
-//* reading_from_a_file
+/* reading_from_a_file
 bool reading_ff(std::ifstream& fin, Address* adr, int& size)
 {
     int a = 0;
@@ -73,8 +52,8 @@ bool reading_ff(std::ifstream& fin, Address* adr, int& size)
     }
     return true;
 }
-
-//* writing_to_a_file
+*/
+/* writing_to_a_file
 bool writing_tf(std::ofstream& fout, Address* adr, int& size)
 {
     int i = 0;
@@ -92,14 +71,19 @@ bool writing_tf(std::ofstream& fout, Address* adr, int& size)
     }
     return true;
 }
-
+*/
 ////////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
     setlocale(LC_ALL,"ru_RU");
     //* initialization
-    int size = 0;
-    Address* adr = nullptr;
+    int size = 1;
+    std::string* c = nullptr;
+    std::string* s = nullptr;
+    int* h = nullptr;
+    int* a = nullptr;
+    Address Adr = Address{c,s,h,a};
+    Address* adr = &Adr;
 
     //* reading_from_a_file
     std::ifstream fin("in.txt");
@@ -108,8 +92,6 @@ int main(int argc, char** argv)
         return 1;
     }
     else {
-        fin >> size;
-        /*
         if (!(fin >> size)) {
             std::cout << "Error reading size from file." << std::endl;
         }
@@ -117,9 +99,11 @@ int main(int argc, char** argv)
         if (0 >= size) {
             std::cout << "Negative or zero size." << std::endl;
         }
-        */
         adr = new Address[size];
-        reading_ff(fin, adr, size);
+        std::string str = "abc";
+        for (int x = 0; (x < size); x++) {
+            Address{ fin, fin, fin, fin };
+        }
         fin.close();
     }
 
