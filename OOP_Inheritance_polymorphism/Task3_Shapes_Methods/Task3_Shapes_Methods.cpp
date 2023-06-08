@@ -319,10 +319,6 @@ int main(int argc, char** argv)
         }
     }
     f = nullptr;
-    t = nullptr;
-    q = nullptr;
-    p = nullptr;
-    r = nullptr;
     return 0;
 }
 /* Thanks for the tutorial! */
