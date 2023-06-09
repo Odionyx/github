@@ -33,7 +33,7 @@ public:
     int get_apartment(void) {
         return apartment;
     }
-    void get_address(std::ofstream& fout) {
+    void print_address(std::ofstream& fout) {
         fout << this->city << ", " << this->street << ", " << this->house << ", " << this->apartment;
         return;
     }
@@ -75,17 +75,22 @@ int main(int argc, char** argv)
     std::ifstream fin("in.txt");
     if (!(fin.is_open())) {
         std::cout << "Error reading from file." << std::endl;
+        adr = nullptr;
         return 1;
     }
     else {
         if (!(fin >> size)) {
             std::cout << "Error reading size from file." << std::endl;
+            adr = nullptr;
+            return 1;
         }
         //* проверка размера
         if (0 >= size) {
             std::cout << "Negative or zero size." << std::endl;
+            adr = nullptr;
+            return 1;
         }
-        adr = new Address[5]{};
+        adr = new Address[size]{};
         std::string str = "abc";
         for (int x = 0; (x < size); x++) {
             fin >> c >> s >> h >> a;
@@ -94,14 +99,12 @@ int main(int argc, char** argv)
         fin.close();
     }
 
-
     bool sorted;
     do
-    {
-        
+    {  
         sorted = false;
            // переменная для обмена значениями
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < (size-1); i++)
         {
             // если предыдущая строка больше последующей
             if (adr[i].get_city() < adr[i+1].get_city())
@@ -137,7 +140,7 @@ int main(int argc, char** argv)
     else {
         fout << size << std::endl;
         for (int x = (size - 1); 0 <= x; x--) {
-            adr[x].get_address(fout);
+            adr[x].print_address(fout);
             fout << std::endl;
         }
         fout.close();
